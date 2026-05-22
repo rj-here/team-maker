@@ -1,4 +1,5 @@
 #This is going to be a simple team maker program.
+import random
 def takeName(count):
     names = set()
     for i in range(0, count): 
@@ -12,7 +13,7 @@ def playerCount():
     print(f"${count} players involved.")
     return count
 
-def nameSets():
+def nameSet():
     count = playerCount()
     print(count)
     names = takeName(count)
@@ -21,5 +22,32 @@ def teamCount():
     team = int(input("How many teams do you want? ")) #Number of teams
     return team
 
-nameSets()
+def teamSizeFixed():
+    fixed = (input("Does the team size need to be fixed? For example, a team of 11 to play cricket :)"))
+    if (fixed == "Yes" or "True"):
+        fixed = True
+    
+    elif (fixed == "No" or "False"):
+        fixed = False
+    
+    return fixed
+
+def combinationType():
+    print('Which type of combination do you want?')
+    print('1: Fully randomized!')
+    print('2: Separating select players')
+    print('3: Certain combinations (1 mentor, 2 volunteers, 2 juniors, as an example)')
+    combination = int(input("Please provide the choice between the 3! "))
+    if (combination == 1):
+
+def randomize(names, teamSize, teamCount):
+
+def selectSeparationFirst(names, teamSize, teamCount):
+
+def certainCombos(names, teamSize, teamCount):
+
+        
+nameSet()
 teamCount()
+teamSizeFixed()
+combinationType()
