@@ -41,7 +41,15 @@ def combinationType():
     if (combination == 1):
 
 def randomize(names, teamSize, teamCount):
+    random.shuffle(names) #Shuffle - https://www.geeksforgeeks.org/python/random-shuffle-function-in-python/
+    teams = set() #Gemini guides!
 
+    for i in range(0, len(names), teamSize): #adding all names to teams until done
+        chunk = names[i : i + teamSize] #making a chunk to add set of teams
+        teams.add(tuple(chunk)) #add to team
+    return teams
+
+        
 def selectSeparationFirst(names, teamSize, teamCount):
 
 def certainCombos(names, teamSize, teamCount):
