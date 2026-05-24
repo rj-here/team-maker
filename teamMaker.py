@@ -48,9 +48,14 @@ def randomize(names, teamSize, teamCount):
         chunk = names[i : i + teamSize] #making a chunk to add set of teams
         teams.add(tuple(chunk)) #add to team
     return teams
-
         
 def selectSeparationFirst(names, teamSize, teamCount):
+    teams = set()
+    nameSelect = input("Which names must not be in the same team? Seperate with a comma (,)")
+    namesSep = nameSelect.split(", ")
+    for team in teams:
+        team.add(namesSep.pop)
+            
 
 def certainCombos(names, teamSize, teamCount):
 
