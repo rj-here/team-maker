@@ -1,5 +1,5 @@
 #This is going to be a simple team maker program.
-import random
+import random #https://docs.python.org/3/library/random.html | https://www.w3schools.com/Python/module_random.asp
 def takeName(count):
     names = set()
     for i in range(0, count): 
@@ -10,7 +10,7 @@ def takeName(count):
 
 def playerCount():
     count = int(input("How many players are involved in total? ")) #Takes number of players
-    print(f"${count} players involved.")
+    print(f"{count} players involved.")
     return count
 
 def nameSet():
@@ -18,49 +18,47 @@ def nameSet():
     print(count)
     names = takeName(count)
 
-def teamCount():
-    team = int(input("How many teams do you want? ")) #Number of teams
-    return team
+def teamConfig(names):
+    style = int(input("Do you want a certain number of teams, or certain number of people per team?\nIf # of teams -> 1, If # of players per team -> 2\n"))
+    if style == 1:
+        noOfTeams(names)
+    elif style == 2:
+        pplPerTeam()
 
-def teamSizeFixed():
-    fixed = (input("Does the team size need to be fixed? For example, a team of 11 to play cricket :)"))
-    if (fixed == "Yes" or "True"):
-        fixed = True
+def noOfTeams(names):
+    random.shuffle(names)
+    teamCount = int(input("How many teams do you want?"))
+    teams = [[] for counter in range(teamCount)] #Gemini guided | https://www.geeksforgeeks.org/python/declare-an-empty-list-in-python/ | https://www.geeksforgeeks.org/python/nested-list-comprehensions-in-python/
+
+    for i, name in enumerate(names): #https://www.geeksforgeeks.org/python/enumerate-in-python/
+        teams[i % teamCount].append(name)
+def pplPerTeam(names):
+    random.shuffle(names) #shuffle
+
+    #Validate input
+    minPpl = int(input("How many people do you want per team? (Minimum)")) 
+    maxPpl = int(input("How many people do you want per team? (Maximum)"))
+    while (minPpl > maxPpl):
+        print("Try again!")
+        minPpl = int(input("How many people do you want per team? (Minimum)")) 
+        maxPpl = int(input("How many people do you want per team? (Maximum)"))
     
-    elif (fixed == "No" or "False"):
-        fixed = False
-    
-    return fixed
+    teams = [] #initialize
 
-def combinationType():
-    print('Which type of combination do you want?')
-    print('1: Fully randomized!')
-    print('2: Separating select players')
-    print('3: Certain combinations (1 mentor, 2 volunteers, 2 juniors, as an example)')
-    combination = int(input("Please provide the choice between the 3! "))
-    if (combination == 1):
+    #Create teams until names ain't finished, Gemini guides.
+    remaining_names = names[:]
+    while(len(remaining_names) > 0):
+        #Size of teams:
+        size = random.randint(minPpl, maxPpl)
+        #Just keeping track: not taking more names than leftovers
+        actualSize = min(size, len(remaining_names))
 
-def randomize(names, teamSize, teamCount):
-    random.shuffle(names) #Shuffle - https://www.geeksforgeeks.org/python/random-shuffle-function-in-python/
-    teams = set() #Gemini guides!
+        #Slice it for a team
+        team = remaining_names[:actualSize]
+        teams.append(tuple(team))
 
-    for i in range(0, len(names), teamSize): #adding all names to teams until done
-        chunk = names[i : i + teamSize] #making a chunk to add set of teams
-        teams.add(tuple(chunk)) #add to team
+        #Remove those names from the pool
+        remaining_names = remaining_names[:actualSize]
     return teams
-        
-def selectSeparationFirst(names, teamSize, teamCount):
-    teams = set()
-    nameSelect = input("Which names must not be in the same team? Seperate with a comma (,)")
-    namesSep = nameSelect.split(", ")
-    for team in teams:
-        team.add(namesSep.pop)
-            
 
-def certainCombos(names, teamSize, teamCount):
-
-        
-nameSet()
-teamCount()
-teamSizeFixed()
-combinationType()
+teamConfig(names=nameSet())
