@@ -17,6 +17,7 @@ def nameSet():
     count = playerCount()
     print(count)
     names = takeName(count)
+    return names
 
 def teamConfig(names):
     style = int(input("Do you want a certain number of teams, or certain number of people per team?\nIf # of teams -> 1, If # of players per team -> 2\n"))
@@ -26,12 +27,18 @@ def teamConfig(names):
         pplPerTeam()
 
 def noOfTeams(names):
-    random.shuffle(names)
+    if not names: #Gemini guided | https://www.w3schools.com/python/gloss_python_if_not.asp
+        print("No names found!")
+        return None
+    names = list(names) #Gemini guided | https://www.w3schools.com/python/python_lists.asp
+    random.shuffle(names) 
     teamCount = int(input("How many teams do you want?"))
     teams = [[] for counter in range(teamCount)] #Gemini guided | https://www.geeksforgeeks.org/python/declare-an-empty-list-in-python/ | https://www.geeksforgeeks.org/python/nested-list-comprehensions-in-python/
 
     for i, name in enumerate(names): #https://www.geeksforgeeks.org/python/enumerate-in-python/
         teams[i % teamCount].append(name)
+    printTeams(teams=teams)
+
 def pplPerTeam(names):
     random.shuffle(names) #shuffle
 
@@ -59,6 +66,10 @@ def pplPerTeam(names):
 
         #Remove those names from the pool
         remaining_names = remaining_names[:actualSize]
-    return teams
+    printTeams(teams=teams)
+
+def printTeams(teams):
+    for team in teams:
+        print(f"Team {team}")
 
 teamConfig(names=nameSet())
