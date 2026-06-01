@@ -20,11 +20,16 @@ def nameSet():
     return names
 
 def teamConfig(names):
-    style = int(input("Do you want a certain number of teams, or certain number of people per team?\nIf # of teams -> 1, If # of players per team -> 2\n"))
+    style = int(input("What's the preferred team configuration?\nIf a set # of teams -> 1, If a set # of players per team -> 2, Other -> 3\n"))
     if style == 1:
         noOfTeams(names)
     elif style == 2:
-        pplPerTeam()
+        pplPerTeam(names)
+    elif style == 3:
+        other(names)
+    else:
+        print("Invalid input! Try again.")
+        teamConfig(names)
 
 def noOfTeams(names):
     if not names: #Gemini guided | https://www.w3schools.com/python/gloss_python_if_not.asp
@@ -67,6 +72,32 @@ def pplPerTeam(names):
         #Remove those names from the pool
         remaining_names = remaining_names[:actualSize]
     printTeams(teams=teams)
+
+def other(names):
+    print("Ok. Not fully randomized then? How do we do this?")
+    print("1: Certain players may not be on the same team, 2: Certain players must be on the same team")
+    choice = int(input())
+    if choice == 1:
+        other1(names)
+
+def other1(names):
+    print("Ok. Who can't be on the same team?")
+    namesNotTogether = set(input("Enter names separated by commas: ").split(","))
+    #separate names by those that cannot be and can be together, Gemini guides
+    notInSameTeam = [name for name in namesNotTogether if name in names]
+    canBeTogether = [name for name in names if name not in namesNotTogether]
+    print("Got it. Now, how many teams do you want?")
+    teamCount = int(input())
+    teams = [[] for counter in range(teamCount)] #initialize teams
+    #First, put the "not together" names in different teams, Gemini guides
+    for i, name in enumerate(notInSameTeam):
+        teams[i % teamCount].append(name)
+    #Then, shuffle the "can be together" names and distribute them randomly, Gemini guides
+    random.shuffle(canBeTogether)
+    for i, name in enumerate(canBeTogether):
+        teams[i % teamCount].append(name)
+    printTeams(teams=teams)
+
 
 def printTeams(teams):
     for team in teams:
