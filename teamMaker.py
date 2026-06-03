@@ -76,9 +76,11 @@ def pplPerTeam(names):
 def other(names):
     print("Ok. Not fully randomized then? How do we do this?")
     print("1: Certain players may not be on the same team, 2: Certain players must be on the same team")
-    choice = int(input())
+    choice = int(input("Enter your choice (1 or 2): "))
     if choice == 1:
         other1(names)
+    elif choice == 2:
+        other2(names)
 
 def other1(names):
     print("Ok. Who can't be on the same team?")
@@ -86,8 +88,8 @@ def other1(names):
     #separate names by those that cannot be and can be together, Gemini guides
     notInSameTeam = [name for name in namesNotTogether if name in names]
     canBeTogether = [name for name in names if name not in namesNotTogether]
-    print("Got it. Now, how many teams do you want?")
-    teamCount = int(input())
+    print("Got it.")
+    teamCount = int(input("How many teams do you want?"))
     teams = [[] for counter in range(teamCount)] #initialize teams
     #First, put the "not together" names in different teams, Gemini guides
     for i, name in enumerate(notInSameTeam):
@@ -98,6 +100,23 @@ def other1(names):
         teams[i % teamCount].append(name)
     printTeams(teams=teams)
 
+def other2(names):
+    print("Ok, what are the combinations that must be together?")
+    #separate names by those that must be together and those that can be together
+    togetherGroups = set(input("Enter names separated by commas, with | to separate groups ").split("|"))
+    #initializing teams
+    teams = []
+    for group in togetherGroups:
+        groupNames = set(group.split(","))
+        if groupNames:
+            teams.append(groupNames)
+    #Now, shuffle the remaining names and distribute them randomly
+    remaining_names = [name for name in names if all(name not in group for group in teams)]
+    random.shuffle(remaining_names)
+    for i, name in enumerate(remaining_names):
+        teams[i % len(teams)].append(name)
+    printTeams(teams=teams)
+    
 
 def printTeams(teams):
     for team in teams:
