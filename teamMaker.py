@@ -105,6 +105,7 @@ def other2(names):
     #separate names by those that must be together and those that can be together
     togetherGroups = set(input("Enter names separated by commas, with | to separate groups ").split("|"))
     #initializing teams
+    teamCount = int(input("How many teams do you want?"))
     teams = []
     for group in togetherGroups:
         groupNames = set(group.split(","))
@@ -114,7 +115,7 @@ def other2(names):
     remaining_names = [name for name in names if all(name not in group for group in teams)]
     random.shuffle(remaining_names)
     for i, name in enumerate(remaining_names):
-        teams[i % len(teams)].append(name)
+        teams[i % teamCount].append(name)
     printTeams(teams=teams)
     
 
