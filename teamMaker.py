@@ -45,6 +45,7 @@ def noOfTeams(names):
     printTeams(teams=teams)
 
 def pplPerTeam(names):
+    names = list(names) #GitHub Copilot to the rescue
     random.shuffle(names) #shuffle
 
     #Validate input
@@ -60,17 +61,19 @@ def pplPerTeam(names):
     #Create teams until names ain't finished, Gemini guides.
     remaining_names = names[:]
     while(len(remaining_names) > 0):
-        #Size of teams:
-        size = random.randint(minPpl, maxPpl)
-        #Just keeping track: not taking more names than leftovers
-        actualSize = min(size, len(remaining_names))
+        #Configuring team size, GitHub Copilot suggests
+        remaining_count = len(remaining_names)
+        if remaining_count < minPpl:
+            actualSize = remaining_count
+        else:
+            actualSize = random.randint(minPpl, min(maxPpl, remaining_count))
 
         #Slice it for a team
-        team = remaining_names[:actualSize]
+        team = remaining_names[:actualSize] #GitHub Copilot suggests
         teams.append(tuple(team))
 
         #Remove those names from the pool
-        remaining_names = remaining_names[:actualSize]
+        remaining_names = remaining_names[actualSize:]
     printTeams(teams=teams)
 
 def other(names):
@@ -118,9 +121,9 @@ def other2(names):
         teams[i % teamCount].append(name)
     printTeams(teams=teams)
     
-
 def printTeams(teams):
     for team in teams:
         print(f"Team {team}")
 
-teamConfig(names=nameSet())
+names = nameSet()
+teamConfig(names)
