@@ -63,10 +63,17 @@ def pplPerTeam(names):
     while(len(remaining_names) > 0):
         #Configuring team size, GitHub Copilot suggests
         remaining_count = len(remaining_names)
-        if remaining_count < minPpl:
-            actualSize = remaining_count
-        else:
-            actualSize = random.randint(minPpl, min(maxPpl, remaining_count))
+
+        possible_sizes = [
+            size for size in range(minPpl, min(maxPpl, remaining_count) + 1) #GitHub Copilot suggests | takes a range and ensures the size isn't weird (so for 3-4 per team, there isn't a solo)
+            if remaining_count - size == 0 or remaining_count - size >= minPpl
+        ]
+
+        if not possible_sizes:
+            print("Cannot split remaining players with those bounds.")
+            break
+
+        actualSize = random.choice(possible_sizes)
 
         #Slice it for a team
         team = remaining_names[:actualSize] #GitHub Copilot suggests
