@@ -94,20 +94,30 @@ def other(names):
 
 def other1(names):
     print("Ok. Who can't be on the same team?")
-    namesNotTogether = set(input("Enter names separated by commas: ").split(","))
-    #separate names by those that cannot be and can be together, Gemini guides
-    notInSameTeam = [name for name in namesNotTogether if name in names]
-    canBeTogether = [name for name in names if name not in namesNotTogether]
+    raw_input = input("Enter names separated by commas: ")
+    restricted_names = [name.strip() for name in raw_input.split(",") if name.strip()] #GitHub Copilot suggests | takes the input, splits by comma, and removes extra spaces. Also ensures no empty names are added.
+    restricted_names = [name for name in restricted_names if name in names] #GitHub Copilot suggests | ensures that the restricted names are actually in the list of names provided. If not, it removes them from the restricted list.
+
     print("Got it.")
-    teamCount = int(input("How many teams do you want?"))
-    teams = [[] for counter in range(teamCount)] #initialize teams
-    #First, put the "not together" names in different teams, Gemini guides
-    for i, name in enumerate(notInSameTeam):
-        teams[i % teamCount].append(name)
-    #Then, shuffle the "can be together" names and distribute them randomly, Gemini guides
-    random.shuffle(canBeTogether)
-    for i, name in enumerate(canBeTogether):
-        teams[i % teamCount].append(name)
+    team_count = int(input("How many teams do you want?"))
+    teams = [[] for counter in range(team_count)]
+
+    if len(restricted_names) > team_count:
+        print("Too many restricted players for the number of teams.")
+        return
+
+    # Put the restricted names into different teams first.
+    for i, name in enumerate(restricted_names):
+        teams[i % team_count].append(name)
+
+    # Randomly assign everyone else.
+    remaining_names = [name for name in names if name not in restricted_names]
+    random.shuffle(remaining_names)
+
+    for name in remaining_names:
+        target_team = min(teams, key=len)
+        target_team.append(name)
+
     printTeams(teams=teams)
 
 def other2(names):
