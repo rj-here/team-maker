@@ -122,20 +122,34 @@ def other1(names):
 
 def other2(names):
     print("Ok, what are the combinations that must be together?")
-    #separate names by those that must be together and those that can be together
-    togetherGroups = set(input("Enter names separated by commas, with | to separate groups ").split("|"))
-    #initializing teams
-    teamCount = int(input("How many teams do you want?"))
-    teams = []
-    for group in togetherGroups:
-        groupNames = set(group.split(","))
-        if groupNames:
-            teams.append(groupNames)
-    #Now, shuffle the remaining names and distribute them randomly
-    remaining_names = [name for name in names if all(name not in group for group in teams)]
+    raw_input = input("Enter groups separated by |, with names separated by commas: ") #GitHub Copilot suggests | takes the input, splits by | for groups, then splits by comma for names, and removes extra spaces. Also ensures no empty names are added.
+
+    groups = [] #initialize
+    for part in raw_input.split("|"): #GitHub Copilot suggests | splits the input into groups by |, then processes each group to extract names.
+        group = [name.strip() for name in part.split(",") if name.strip()] #GitHub Copilot suggests | takes each group, splits by comma for names, removes extra spaces, and ensures no empty names are added.
+        group = [name for name in group if name in names] #GitHub Copilot suggests | ensures that the names in the group are actually in the list of names provided. If not, it removes them from the group.
+        if group:
+            groups.append(group)
+
+    team_count = int(input("How many teams do you want?"))
+    teams = [[] for _ in range(team_count)]
+
+    if len(groups) > team_count:
+        print("Too many grouped players for the number of teams.")
+        return
+
+    # Place each required group into a different team.
+    for i, group in enumerate(groups):
+        teams[i % team_count].extend(group)
+
+    # Put the remaining players randomly.
+    remaining_names = [name for name in names if all(name not in group for group in groups)]
     random.shuffle(remaining_names)
-    for i, name in enumerate(remaining_names):
-        teams[i % teamCount].append(name)
+
+    for name in remaining_names:
+        target_team = min(teams, key=len)
+        target_team.append(name)
+
     printTeams(teams=teams)
     
 def printTeams(teams):
