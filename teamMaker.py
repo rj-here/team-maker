@@ -94,9 +94,12 @@ def other(names):
 
 def other1(names):
     print("Ok. Who can't be on the same team?")
-    raw_input = input("Enter names separated by commas: ")
-    restricted_names = [name.strip() for name in raw_input.split(",") if name.strip()] #GitHub Copilot suggests | takes the input, splits by comma, and removes extra spaces. Also ensures no empty names are added.
-    restricted_names = [name for name in restricted_names if name in names] #GitHub Copilot suggests | ensures that the restricted names are actually in the list of names provided. If not, it removes them from the restricted list.
+    #Input takes combinations of players who can't be on the same team, separated by | for different combinations, and commas for names within a combination. For example, A & B can't be together, neither can C & D, but A & C or A & D and B & D or B & C are fine.
+    #So the input would be: A,B|C,D. GitHub Copilot suggests | takes the input, splits by | for combinations, then splits by comma for names, and removes extra spaces. Also ensures no empty names are added. It also ensures that the restricted names are actually in the list of names provided. If not, it removes them from the restricted list.
+    raw_input = input("Enter names separated by commas, for players who can't be grouped, then use | to separate different combinations that are ok.\nFor example, A & B can't be together, neither can C & D, but A & C or A & D and B & D or B & C are fine. Anyways, input here:  ")
+    for part in raw_input.split("|"):
+        restricted_names = [name.strip() for name in part.split(",") if name.strip()] #GitHub Copilot suggests | takes the input, splits by comma, and removes extra spaces. Also ensures no empty names are added.
+        restricted_names = [name for name in restricted_names if name in names] #GitHub Copilot suggests | ensures that the restricted names are actually in the list of names provided. If not, it removes them from the restricted list.
 
     print("Got it.")
     team_count = int(input("How many teams do you want?"))
